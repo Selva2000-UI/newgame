@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Letter Buttons with Animation</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(to bottom, #ff9a8b, #fad0c4);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    #playButton {
+      padding: 15px 30px;
+      font-size: 20px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    #playButton:hover {
+      transform: scale(1.1);
+    }
+
+    .buttons-container {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 15px;
+      margin-top: 30px;
+      display: none; /* Hidden initially */
+    }
+
+    .letter-button {
+      padding: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      color: white;
+      background-size: 200% 200%;
+      background-position: 0% 50%;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-position 0.5s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .letter-button:hover {
+      transform: translateY(-5px);
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes growAndShake {
+      0% {
+        transform: scale(1) rotate(0deg);
+      }
+      25% {
+        transform: scale(1.5) rotate(10deg);
+      }
+      50% {
+        transform: scale(1.7) rotate(-10deg);
+      }
+      75% {
+        transform: scale(1.5) rotate(5deg);
+      }
+      100% {
+        transform: scale(1.6) rotate(0deg);
+      }
+    }
+
+    @keyframes crackerEffect {
+      0% {
+        opacity: 1;
+        transform: scale(0);
+      }
+      50% {
+        opacity: 0.6;
+        transform: scale(1.5);
+      }
+      100% {
+        opacity: 0;
+        transform: scale(2);
+      }
+    }
+
+    .cracker {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: gold;
+      border-radius: 50%;
+      animation: crackerEffect 0.8s ease-out forwards;
+    }
+
+    @media (max-width: 768px) {
+      .buttons-container {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .letter-button {
+        padding: 10px;
+        font-size: 18px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .buttons-container {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .letter-button {
+        padding: 8px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <button id="playButton">Play</button>
+    <div class="buttons-container" id="buttonsContainer"></div>
+  </div>
+
+  <script>
+    const playButton = document.getElementById('playButton');
+    const buttonsContainer = document.getElementById('buttonsContainer');
+
+    const letters = Array.from(Array(26)).map((_, i) => String.fromCharCode(65 + i));
+    const clickSound = new Audio('https://www.soundjay.com/button/beep-07.wav');
+    clickSound.preload = 'auto';
+
+    function createButtons() {
+      letters.forEach(letter => {
+        const button = document.createElement('button');
+        button.classList.add('letter-button');
+        button.innerText = letter;
+
+        const gradientAngle = Math.floor(Math.random() * 360);
+        const gradientStart = `hsl(${Math.random() * 360}, 80%, 60%)`;
+        const gradientEnd = `hsl(${Math.random() * 360}, 80%, 60%)`;
+
+        button.style.background = `linear-gradient(${gradientAngle}deg, ${gradientStart}, ${gradientEnd})`;
+        button.style.animation = `gradientMove 5s ease infinite`;
+
+        button.addEventListener('click', () => {
+          clickSound.play().catch(error => console.error('Audio playback failed:', error));
+
+          button.style.animation = 'none';
+          requestAnimationFrame(() => {
+            button.style.animation = 'growAndShake 1s ease';
+          });
+
+          const newGradientStart = `hsl(${Math.random() * 360}, 80%, 60%)`;
+          const newGradientEnd = `hsl(${Math.random() * 360}, 80%, 60%)`;
+          button.style.background = `linear-gradient(45deg, ${newGradientStart}, ${newGradientEnd})`;
+
+          for (let i = 0; i < 10; i++) {
+            const cracker = document.createElement('div');
+            cracker.classList.add('cracker');
+            cracker.style.left = `${button.offsetLeft + button.offsetWidth / 2}px`;
+            cracker.style.top = `${button.offsetTop + button.offsetHeight / 2}px`;
+            buttonsContainer.appendChild(cracker);
+
+            setTimeout(() => cracker.remove(), 1200);
+          }
+
+          setTimeout(() => {
+            window.location.href = 'nextpage.html';
+          }, 1000);
+        });
+
+        buttonsContainer.appendChild(button);
+      });
+    }
+
+    playButton.addEventListener('click', () => {
+      playButton.style.display = 'none';
+      buttonsContainer.style.display = 'grid';
+      createButtons();
+    });
+  </script>
+</body>
+</html>

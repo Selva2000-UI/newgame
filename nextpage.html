@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alphabet Bubbles</title>
+  <style>
+    /* Existing styles */
+    body {
+  margin: 0;
+  padding: 0;
+  height: 100vh; /* Ensure the body covers the full viewport */
+  display: flex;
+  flex-direction: column;
+      justify-content: space-between;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #ff7e5f, #feb47b); /* Default background gradient */
+}
+
+
+    .card {
+      width: 300px;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: linear-gradient( 177.5deg,  rgba(255,200,42,1) 28.3%, rgba(202,32,132,1) 79.8% );
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      animation: appearAndMove 4s ease-in-out forwards;
+      position: absolute;
+      top: 50%; /* Start from the center */
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .neon-text {
+      font-size: 6rem;
+      font-weight: bold;
+      color: hsl(112, 78%, 53%);
+      text-shadow: 0 0 5px #e42828, 0 0 10px #e42828, 0 0 20px #e42828;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes appearAndMove {
+      0% {
+        transform: scale(1.5) translate(-50%, -50%);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1) translate(-50%, -50%);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(0.6) translate(-50%, 0%);
+        opacity: 1;
+      }
+    }
+
+    @keyframes glow {
+      0% {
+        text-shadow: 0 0 5px #e42828, 0 0 10px #e42828, 0 0 20px #e42828;
+      }
+      100% {
+        text-shadow: 0 0 10px #e42828, 0 0 20px #e42828, 0 0 40px #e42828;
+      }
+    }
+
+    /* Bubble container positioned at top */
+    #bubbleContainer {
+      position: absolute;
+      top: 1%;
+      width: 100%;
+      height: 70%;
+      background: rgba(233, 14, 193, 0.1);
+      overflow: hidden;
+     /* border-bottom: 5px solid #333; */
+      z-index: 5;
+    }
+
+    .bubble {
+      position: absolute;
+      background: linear-gradient(45deg, #e27474, #fffc61, #7bff7b, #61c7ff);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #e428de;
+      font-size: 3rem;
+      font-weight: bold;
+      width: 8vw; /* Adjusted size to better fit on mobile */
+      height: 8vw; /* Adjusted size to better fit on mobile */
+      animation: fadeIn 1s ease-in-out, float 3s ease-in-out infinite;
+    }
+
+    @keyframes fadeIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-30px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    /* Adjust wave positioning to the bottom */
+    .waves {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      height: 25vh;
+      min-height: 100px;
+      max-height: 150px;
+    }
+    /* Animation  wave*/
+    .parallax > use {
+        animation: move-forever 25s cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+      }
+
+      .parallax > use:nth-child(1) {
+        animation-delay: -2s;
+        animation-duration: 7s;
+      }
+
+      .parallax > use:nth-child(2) {
+        animation-delay: -3s;
+        animation-duration: 10s;
+      }
+
+      .parallax > use:nth-child(3) {
+        animation-delay: -4s;
+        animation-duration: 13s;
+      }
+
+      .parallax > use:nth-child(4) {
+        animation-delay: -5s;
+        animation-duration: 20s;
+      }
+
+      @keyframes move-forever {
+        0% {
+          transform: translate3d(-90px, 0, 0);
+        }
+
+        100% {
+          transform: translate3d(85px, 0, 0);
+        }
+      }
+
+    /* Adjusted for mobile responsiveness */
+    @media (max-width: 768px) {
+      .waves {
+        height: 30vh; /* Increased wave height for better mobile visibility */
+        min-height: 30px;
+      }
+
+      .card {
+        width: 90%;
+        height: 250px; /* Adjusted for smaller screens */
+      }
+
+      .neon-text {
+        font-size: 4rem; /* Slightly smaller text on mobile */
+      }
+
+      .bubble {
+        width: 12vw;
+        height: 12vw;
+      }
+    }
+
+    .firework {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, rgba(255, 255, 0, 1) 0%, rgba(255, 0, 0, 0.5) 70%, rgba(0, 0, 0, 0) 100%);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: fireworks 1s forwards;
+    }
+
+    @keyframes fireworks {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(3);
+        opacity: 0;
+      }
+    }
+
+    .bubble.wrong {
+      animation: moveDown 2s ease-in-out forwards;
+    }
+
+    @keyframes moveDown {
+      0% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+    }
+
+    .bubble.blast {
+      animation: blast 0.5s forwards;
+    }
+
+    @keyframes blast {
+      0% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(2);
+        opacity: 0.7;
+      }
+      100% {
+        transform: scale(3);
+        opacity: 0;
+      }
+    }
+
+    .navigation-buttons {
+      position: absolute;
+      top: 10px;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .nav-button {
+        padding: 10px 20px;
+      font-size: 16px;
+      background: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    .nav-button:hover {
+      transform: scale(1.1);
+      background: #555;
+    }
+
+  </style>
+</head>
+<body>
+  <audio id="popSound" src="pop.mp3"></audio>
+  <div class="container">
+    <div class="waves">
+        <svg
+            class="waves"
+            xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink"
+            viewBox="0 24 150 28"
+            preserveAspectRatio="none"
+            shape-rendering="auto"
+        >
+            <defs>
+                <path
+                    id="gentle-wave"
+                    d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z"
+                />
+            </defs>
+            <g class="parallax">
+                <use xlink:href="#gentle-wave" x="48" y="0" fill="#1a91e4" />
+                <use xlink:href="#gentle-wave" x="48" y="3" fill="#198ce1" />
+                <use xlink:href="#gentle-wave" x="48" y="5" fill="#1987de" />
+                <use xlink:href="#gentle-wave" x="48" y="7" fill="#1b81db" />
+                <use xlink:href="#gentle-wave" x="48" y="9" fill="#1e7cd8" />
+                <use xlink:href="#gentle-wave" x="48" y="11" fill="#1f78d7" />
+                <use xlink:href="#gentle-wave" x="48" y="13" fill="#2174d6" />
+                <use xlink:href="#gentle-wave" x="48" y="15" fill="#2470d5" />
+                <use xlink:href="#gentle-wave" x="48" y="17" fill="#276cd6" />
+                <use xlink:href="#gentle-wave" x="48" y="19" fill="#2b68d7" />
+                <use xlink:href="#gentle-wave" x="48" y="21" fill="#3064d7" />
+                <use xlink:href="#gentle-wave" x="48" y="23" fill="#3660d7" />
+            </g>
+        </svg>
+    </div>
+  </div>
+
+  <div class="card" id="card">
+    <div class="neon-text" id="neonText"></div>
+  </div>
+  <div id="bubbleContainer">
+    <div class="navigation-buttons">
+      <button class="nav-button" id="homeButton">🏠 Home</button>
+      <button class="nav-button" id="nextButton">➡️ Next</button>
+    </div>
+  </div>
+ 
+
+  <script>
+// Array of 20 gradient colors
+const gradients = [
+//#FBAB7E;FBDA61,85FFBD
+'linear-gradient(to right, #FBAB7E, #F7CE68,ffffff)',
+  'linear-gradient(to right, #FBDA61, #FFFB7D )',
+  'linear-gradient(to right, #85FFBD, #ee0979)',
+  'linear-gradient(to right, #FBDA61 0% , #FF5ACD 100%)',
+  'linear-gradient(90deg, #FF9A8B 0%, #FF6A88 55%, #FF99AC 100%)',//FF9A8B
+  'l linear-gradient(45deg, #FA8BFF 0%, #ffa62b 52%, #2BFF88 90%)',//FA8BFF
+  'linear-gradient(45deg, #FBDA61 19%, #FF5ACD 56%, #75e826 89%)',//FBDA61
+  'linear-gradient(132deg, #F4D03F 8%, #8da016 52%, #d08b0d 100%)',//F4D03F
+  'linear-gradient(to right, #ff7e5f, #feb47b)',
+  'linear-gradient(to right, #1f4037, #99f2c8)',
+  'linear-gradient(to right, #3a7bd5, #3a6073)',
+  'linear-gradient(to right, #11998e, #38ef7d)',
+  'linear-gradient(to right, #fc4a1a, #f7b733)',
+  'linear-gradient(to right, #12c2e9, #c471ed, #f64f59)',
+  'linear-gradient(to right, #c94b4b, #4b134f)',
+  'linear-gradient(to right, #5a3f37, #2c7744)',
+  'linear-gradient(to right, #ff5f6d, #ffc371)',
+  'linear-gradient(to right, #4e54c8, #8f94fb)',
+  'linear-gradient(to right, #007991, #78ffd6)',
+  'linear-gradient(to right, #800080, #ffc0cb)',
+  'linear-gradient(to right, #ffb3b3, #ccffcc, #b3b3ff)',
+            'linear-gradient(to right, #c6e0ff, #ffd9b3, #b3e6ff)',
+            'linear-gradient(to right, #b3ffcc, #ffe0b3, #ffb3cc)',
+            'linear-gradient(to right, #ffccff, #b3b3ff, #ff99b3)',
+            'linear-gradient(to right, #c2e6ff, #ffb3b3, #ffdfb3)',
+            'linear-gradient(to right, #f7d9b3, #b3ffd9, #ffb3ff)',
+            'linear-gradient(to right, #e6ffcc, #ffccff, #ff99b3)',
+            'linear-gradient(to right, #ffdfb3, #b3b3ff, #ccffcc)',
+            'linear-gradient(to right, #d9ffcc, #ffb3d9, #b3c6ff)',
+            'linear-gradient(to right, #ffcc99, #b3d9ff, #ffb3c6)',
+            'linear-gradient(to right, #ccffb3, #b3ffb3, #ff99cc)',
+            'linear-gradient(to right, #ff99b3, #b3c6ff, #b3e6ff)',
+            'linear-gradient(to right, #b3ffd9, #ffb3ff, #ffcc99)',
+            'linear-gradient(to right, #ffb3c6, #ff99b3, #ccffcc)',
+            'linear-gradient(to right, #d9b3ff, #ffccff, #b3e6ff)',
+            'linear-gradient(to right, #ffb3ff, #ffcc99, #e6ffcc)',
+            'linear-gradient(to right, #f7c2ff, #c6e0ff, #ff99cc)',
+            'linear-gradient(to right, #b3b3ff, #ffb3b3, #e6d9ff)',
+            'linear-gradient(to right, #ccffb3, #ffb3d9, #ffccff)',
+            'linear-gradient(to right, #ffb3d9, #e6ffb3, #b3b3ff)',
+            'linear-gradient(to right, #c2ffb3, #ff99ff, #ffb3c6)',
+            'linear-gradient(to right, #ffb3cc, #ff99cc, #b3ffcc)',
+            'linear-gradient(to right, #b3ff99, #ffd9ff, #ffccff)'
+];
+
+// Set a random gradient as background
+const randomGradient = gradients[Math.floor(Math.random() * gradients.length)];
+document.body.style.background = randomGradient;
+document.body.style.backgroundSize = 'cover'; // Ensure the gradient scales nicely
+
+ const popSound = document.getElementById('popSound');
+    const bubbleContainer = document.getElementById('bubbleContainer');
+    const minBubbles = 10;
+    const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let clickedLetter = localStorage.getItem('clickedLetter') || 'A'; // Default to 'O'
+    const bubbles = [];
+
+    // Display the clicked letter in neon text
+    const neonText = document.getElementById('neonText');
+    neonText.textContent = clickedLetter;
+
+    function getLetterRange(clickedLetter) {
+      const startIndex = alphabet.indexOf(clickedLetter);
+      const rangeSize = 3;
+      const result = [];
+      for (let i = 0; i < rangeSize; i++) {
+        const currentIndex = (startIndex + i) % alphabet.length;
+        result.push(alphabet[currentIndex]);
+      }
+      return result;
+    }
+
+    function isBubbleOverlapping(newX, newY, size) {
+      for (let bubble of bubbles) {
+        const distance = Math.sqrt((newX - bubble.x) ** 2 + (newY - bubble.y) ** 2);
+        if (distance < size) return true;
+      }
+      return false;
+
+    }
+
+    // Define the height of the wave and card areas
+const waveAreaHeight = document.querySelector('.waves').offsetHeight;
+const cardAreaHeight = document.getElementById('card').offsetHeight;
+
+    // Log to track bubble creation
+    function createBubble() {
+      console.log("Creating a new bubble...");
+      if (bubbles.length >= minBubbles) {
+        console.log("Minimum bubbles already created.");
+        return;
+      }
+
+      const size = Math.min(10 * window.innerWidth / 100, 80);
+      const range = getLetterRange(clickedLetter);
+      const letter = range[Math.floor(Math.random() * range.length)];
+      let x, y, overlapping, attempts = 0;
+
+      do {
+        overlapping = false;
+        x = Math.random() * (bubbleContainer.offsetWidth - size);
+        y = Math.random() * (bubbleContainer.offsetHeight - size);
+        if (y < waveAreaHeight + 10 || y > bubbleContainer.offsetHeight - cardAreaHeight - 10) {
+      y = Math.random() * (bubbleContainer.offsetHeight - size); // Reset if in restricted areas
+    }
+        attempts++;
+        if (attempts > 100) break;
+      } while (isBubbleOverlapping(x, y, size));
+
+      const bubble = document.createElement('div');
+      bubble.style.width = `${size}px`;
+      bubble.style.height = `${size}px`;
+      bubble.className = 'bubble';
+      bubble.style.left = `${x}px`;
+      bubble.style.top = `${y}px`;
+      bubble.textContent = letter;
+
+      bubble.addEventListener("click", () => {
+        if (bubble.textContent === clickedLetter) {
+          
+          showFirework(bubble.offsetLeft, bubble.offsetTop);
+          bubble.remove();
+          popSound.play();
+          
+          // Add blast animation first
+          //bubble.classList.add('blast');
+          
+          // After blast animation finishes, remove the bubble and create a new one
+          setTimeout(() => {
+             setTimeout(() => createBubble(), 1000); // Wait for 1 second before creating a new bubble
+          }, 500); // Wait for the blast animation (0.5s) to finish before removing the bubble
+        } else {
+          bubble.classList.add('wrong');
+          setTimeout(() => {
+            bubble.remove();
+            createBubble();
+          }, 1000);
+        }
+      });
+
+      bubbles.push({ element: bubble, x, y });
+      bubbleContainer.appendChild(bubble);
+    }
+
+    // Check bubble container size
+    console.log("Bubble Container Width: ", bubbleContainer.offsetWidth);
+    console.log("Bubble Container Height: ", bubbleContainer.offsetHeight);
+
+    function showFirework(x, y) {
+      const firework = document.createElement('div');
+      firework.className = 'firework';
+      firework.style.left = `${x}px`;
+      firework.style.top = `${y}px`;
+      document.body.appendChild(firework);
+
+      setTimeout(() => firework.remove(), 1000);
+    }
+
+    // Function to reset the bubble container
+    function resetBubbleContainer() {
+      console.log("Resetting bubble container...");
+      // Remove all bubbles
+      while (bubbles.length > 0) {
+        const bubble = bubbles.pop();
+        bubble.element.remove();
+      }
+      
+      // Create new bubbles after clearing the container
+      for (let i = 0; i < minBubbles; i++) {
+        createBubble();
+      }
+    }
+
+    // Initialize the game
+    function initGame() {
+      const card = document.getElementById('card');
+      card.addEventListener('animationend', () => {
+        console.log("Animation ended, creating initial bubbles...");
+        for (let i = 0; i < minBubbles; i++) {
+          createBubble();
+        }
+
+        setInterval(() => {
+          if (bubbles.length < minBubbles) {
+            createBubble();
+          }
+        }, Math.random() * 1000 + 1000); // Random interval between 1s and 3s
+      });
+
+      // Reset bubble container every 10 seconds
+      setInterval(resetBubbleContainer, 15000); // 10 seconds in milliseconds
+    }
+
+    initGame();
+
+    
+ // Navigate to the playButton view in newone.html
+ document.getElementById('homeButton').addEventListener('click', () => {
+      window.location.href = 'newone.html?view=play'; // Navigate to playButton
+    });
+
+    // Navigate to the buttonsContainer view in newone.html
+    document.getElementById('nextButton').addEventListener('click', () => {
+      window.location.href = 'newone.html?view=buttons'; // Navigate to buttonsContainer
+    });
+  </script>
+</body>
+</html>
