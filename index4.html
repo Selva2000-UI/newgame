@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Levels</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+        }
+
+        .level-buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+
+        .locked {
+            background-color: #888;
+            cursor: not-allowed;
+        }
+
+        .locked:hover {
+            background-color: #888;
+        }
+
+        .clicked {
+            background-color: orange !important;
+            font-weight: bold;
+            border: 2px solid #333;
+        }
+
+        .level-content {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .level-content.active {
+            display: block;
+        }
+
+        .level-content h2 {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Game Levels</h1>
+        <div class="level-buttons">
+            <!-- Dynamically created level buttons will go here -->
+        </div>
+
+        <div class="level-content" id="levelContent">
+            <!-- Level content will be shown here -->
+        </div>
+    </div>
+
+    <script>
+        // Define the unlocked levels (starting with level 1 unlocked)
+        let unlockedLevels = [1]; // Level 1 is unlocked initially
+
+        // Function to create level buttons dynamically
+        function createLevelButtons() {
+            const levelContainer = document.querySelector('.level-buttons');
+
+            // Create 50 buttons for levels 1 to 50
+            for (let i = 1; i <= 50; i++) {
+                const button = document.createElement('button');
+                button.textContent = `Level ${i}`;
+
+                // Check if the level is unlocked
+                if (unlockedLevels.includes(i)) {
+                    button.onclick = () => {
+                        unlockNextLevel(i); // Unlock the next level when the current one is clicked
+                        button.classList.add('clicked'); // Change the color of the clicked button
+                        showLevelContent(i); // Show the content for the corresponding level
+                    };
+                } else {
+                    button.classList.add('locked'); // Style it as locked
+                    button.disabled = true; // Disable the button functionality
+                }
+
+                levelContainer.appendChild(button);
+            }
+
+            // Update the state of all buttons after creating them
+            updateButtonState();
+        }
+
+        // Function to unlock the next level after the current level is clicked
+        function unlockNextLevel(currentLevel) {
+            // Unlock the next level
+            if (currentLevel < 50 && !unlockedLevels.includes(currentLevel + 1)) {
+                unlockedLevels.push(currentLevel + 1); // Add the next level to the unlocked array
+                updateButtonState(); // Update button state for all levels
+            }
+        }
+
+        // Function to update the state of all buttons based on unlocked levels
+        function updateButtonState() {
+            const levelButtons = document.querySelectorAll('.level-buttons button');
+            levelButtons.forEach((button, index) => {
+                const level = index + 1;
+                if (unlockedLevels.includes(level)) {
+                    button.disabled = false; // Enable the button
+                    button.classList.remove('locked'); // Remove locked class
+                    // Add the function to show the level content
+                    button.onclick = () => {
+                        unlockNextLevel(level); // Unlock the next level
+                        button.classList.add('clicked'); // Make this button orange
+                        showLevelContent(level); // Show the corresponding level content
+                    };
+                }
+            });
+        }
+
+        // Function to show the content for the selected level
+        function showLevelContent(level) {
+            const contentDiv = document.getElementById('levelContent');
+            contentDiv.classList.add('active'); // Show the content div
+
+            // Display different content for each level (you can customize this)
+            contentDiv.innerHTML = `
+                <h2>Level ${level} Content</h2>
+                <p>Welcome to level ${level}! This is where the challenge for this level will be displayed.</p>
+                <p>You can add your game mechanics, challenges, or tasks here for the player.</p>
+            `;
+        }
+
+        // Run the function to create buttons when the page loads
+        createLevelButtons();
+    </script>
+</body>
+</html>
